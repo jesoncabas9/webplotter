@@ -89,12 +89,28 @@ function clearAll() {
 
 // === Save to Firebase ===
 function saveSlots() {
+    // Auto-finish polygon if still drawing
+    if (currentSlot.length >= 3) {
+        slots.push([...currentSlot]);
+        currentSlot = [];
+    }
+
+    // Prevent saving nothing
+    if (slots.length === 0) {
+        alert("No slots to save!");
+        return;
+    }
+
+    // 🔍 Debug log to verify what is actually being saved
+    console.log("Saving slots to Firebase:", JSON.stringify(slots, null, 2));
+
     fetch(FIREBASE_URL, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(slots)
     })
-    .then(() => alert("Saved to Firebase!"));
+    .then(() => alert("Saved to Firebase!"))
+    .catch(err => console.error("Save error:", err));
 }
 
 // === Load from Firebase ===
@@ -109,4 +125,5 @@ function loadSlots() {
 
 // === Load on startup ===
 loadSlots();
+
 
