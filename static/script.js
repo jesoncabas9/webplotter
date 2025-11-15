@@ -109,3 +109,4 @@ function loadSlots() {
 
 // === Load on startup ===
 loadSlots();
+
